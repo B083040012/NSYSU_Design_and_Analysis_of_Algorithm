@@ -11,3 +11,10 @@ class diagramWidget(QWidget):
         vertical_layout.addWidget(self.canvas)
         self.canvas.axes = self.canvas.figure.add_subplot(111)
         self.setLayout(vertical_layout)
+
+    def reset(self):
+        self.canvas.axes.clear()
+        self.canvas.axes.set_xlim([0, 800])
+        self.canvas.axes.set_ylim([0, 600])
+        self.canvas.axes.invert_yaxis()
+        self.canvas.draw()
