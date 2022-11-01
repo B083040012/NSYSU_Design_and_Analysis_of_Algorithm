@@ -1,7 +1,4 @@
-from os import remove
-from pickle import FALSE
 import numpy as np
-import math
 
 class myVoronoiDiagram():
     def __init__(self):
@@ -229,7 +226,6 @@ class myVoronoiDiagram():
                     slope = edge_vector[1] / edge_vector[0]
                     tmp_list = [[0, midpoint[1] - slope * midpoint[0]], [600, midpoint[1] + (600 - midpoint[0]) * slope], \
                         [midpoint[0] - (midpoint[1] / slope), 0], [midpoint[0] + (600 - midpoint[1]) / slope, 600]]
-                    print("tmp_list: {0}".format(tmp_list))
                     # remove points outside the canvas and points not on the same direction as edge_vector
                     p_list = [p for p in tmp_list if self.valid_p_list(p, edge_vector, circumcenter)]
                 """
