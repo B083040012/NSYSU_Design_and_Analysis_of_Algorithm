@@ -229,21 +229,23 @@ class myVoronoiDiagram():
                     slope = edge_vector[1] / edge_vector[0]
                     tmp_list = [[0, midpoint[1] - slope * midpoint[0]], [600, midpoint[1] + (600 - midpoint[0]) * slope], \
                         [midpoint[0] - (midpoint[1] / slope), 0], [midpoint[0] + (600 - midpoint[1]) / slope, 600]]
+                    print("tmp_list: {0}".format(tmp_list))
                     # remove points outside the canvas and points not on the same direction as edge_vector
                     p_list = [p for p in tmp_list if self.valid_p_list(p, edge_vector, circumcenter)]
                 """
                 Ensure that the edge will be shown in the GUI window
                 """
-                end_p = p_list[0]
-                if circumcenter[0] < 0 or circumcenter[0] > 600 or circumcenter[0] < 0 or circumcenter[1] > 600:
-                    # circumcenter is outside the canvas, adject the start_p
-                    start_p = p_list[1]
-                else:
-                    start_p = circumcenter
-                draw_diagram_ele_list[1][0][0].append(int(start_p[0]))
-                draw_diagram_ele_list[1][0][1].append(int(start_p[1]))
-                draw_diagram_ele_list[1][1][0].append(int(end_p[0]))
-                draw_diagram_ele_list[1][1][1].append(int(end_p[1]))
+                if len(p_list) > 0:
+                    end_p = p_list[0]
+                    if circumcenter[0] < 0 or circumcenter[0] > 600 or circumcenter[0] < 0 or circumcenter[1] > 600:
+                        # circumcenter is outside the canvas, adject the start_p
+                        start_p = p_list[1]
+                    else:
+                        start_p = circumcenter
+                    draw_diagram_ele_list[1][0][0].append(int(start_p[0]))
+                    draw_diagram_ele_list[1][0][1].append(int(start_p[1]))
+                    draw_diagram_ele_list[1][1][0].append(int(end_p[0]))
+                    draw_diagram_ele_list[1][1][1].append(int(end_p[1]))
                 
         else:
             print("4-point or more: currently cannot deal with")
