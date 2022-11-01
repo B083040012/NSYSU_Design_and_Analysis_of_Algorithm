@@ -1,3 +1,5 @@
+from os import remove
+from pickle import FALSE
 import numpy as np
 import math
 
@@ -125,6 +127,14 @@ class myVoronoiDiagram():
         except:
             return -1, -1
 
+    def valid_p_list(self, p, edge_vector = None, circumcenter = None):
+        if p[0] < 0 or p[0] > 600 or p[1] < 0 or p[1] > 600:
+            return False
+        elif (circumcenter is not None) and (edge_vector is not None) and \
+            (((p[0] - circumcenter[0]) * edge_vector[0] < 0) or ((p[1] - circumcenter[1]) * edge_vector[1] < 0)):
+            return False
+        return True
+
     def draw_voronoi_diagram(self, point_set):
         point_num = len(point_set)
         if point_num == 1:
@@ -140,33 +150,28 @@ class myVoronoiDiagram():
             draw_diagram_ele_list[0][0].append(point_set[i][0])
             draw_diagram_ele_list[0][1].append(point_set[i][1])
         if point_num == 2:
-            print("2 point case")
+            print("2-point case")
             midpoint = [int((point_set[0][0] + point_set[1][0]) / 2), int((point_set[0][1] + point_set[1][1]) / 2)]
             if (point_set[1][1] - point_set[0][1]) == 0:
                 # two points are horizontal
-                start_p = [midpoint[0], 0]
-                end_p = [midpoint[0], 600]
-                slope = 0
+                p_list = [[midpoint[0], 0], [midpoint[0], 600]]
             elif (point_set[1][0] - point_set[0][0]) == 0:
                 # two points are vertical
-                start_p = [0, midpoint[1]]
-                end_p = [800, midpoint[1]]
-                slope = 0
+                p_list = [[0, midpoint[1]], [600, midpoint[1]]]
             else:
                 slope = -(point_set[1][0] - point_set[0][0]) / (point_set[1][1] - point_set[0][1])
-                print("slope: {0}".format(slope))
-                start_p = [0, midpoint[1] - slope * midpoint[0]] if (midpoint[1] - slope * midpoint[0]) > 0 \
-                    else [800, midpoint[1] + (800 - midpoint[0]) * slope]
-                end_p = [midpoint[0] - (midpoint[1] / slope), 0] if (midpoint[0] - (midpoint[1] / slope)) > 0 \
-                    else [midpoint[0] + (800 - midpoint[1]) / slope, 800]
+                tmp_list = [[0, midpoint[1] - slope * midpoint[0]], [600, midpoint[1] + (600 - midpoint[0]) * slope], \
+                    [midpoint[0] - (midpoint[1] / slope), 0], [midpoint[0] + (600 - midpoint[1]) / slope, 600]]
+                p_list = [p for p in tmp_list if self.valid_p_list(p)]
+            # ensure that start and end point are on the canvas edge
+            start_p, end_p = p_list[0], p_list[1]
             draw_diagram_ele_list[1][0][0].append(int(start_p[0]))
             draw_diagram_ele_list[1][0][1].append(int(start_p[1]))
             draw_diagram_ele_list[1][1][0].append(int(end_p[0]))
             draw_diagram_ele_list[1][1][1].append(int(end_p[1]))
 
-            # print("midpoint: {3}\nslope: {0}\nstart_p: {1}\nend_p: {2}".format(slope, start_p, end_p, midpoint))
         elif point_num == 3:
-            print("3 point case")
+            print("3-point case")
             circumcenter_x, circumcenter_y = self.get_circumcenter(point_set)
             """
             Three point on same line: execute 2-point case twice
@@ -191,9 +196,9 @@ class myVoronoiDiagram():
             For each bisector:
                 1. check the angle of two vector
                 2. if angle <= 90:
-                        vector = {circumcenter --> intersection (point)}
+                        vector = {circumcenter --> midpoint}
                    else:
-                        vector = - {circumcenter -->  intersection (point)}
+                        vector = - {circumcenter -->  midpoint}
                 3. find the start point and end point by vector
             """
             for i in range(3):
@@ -212,42 +217,36 @@ class myVoronoiDiagram():
                 if edge_vector[0] == 0 and edge_vector[1] == 0:
                     print("90 degree, circumcenter = midpoint")
                     edge_vector = [vector_p1[0] + vector_p2[0], vector_p1[1] + vector_p2[1]]
-                """
-                Normalize the edge_vector to length = 1
-                """
-                scale = (1 / math.sqrt(pow(edge_vector[0], 2) + pow(edge_vector[1], 2)))
-                edge_vector[0] = scale * edge_vector[0]
-                edge_vector[1] = scale * edge_vector[1]
-                if np.dot(vector_p1, vector_p2) < 0:
+                elif np.dot(vector_p1, vector_p2) < 0:
                     print("greater and equal than 90 degree")
                     edge_vector[0] = -edge_vector[0]
                     edge_vector[1] = -edge_vector[1]
-                start_p = circumcenter
-                end_p = [circumcenter[0] + edge_vector[0], circumcenter[1] + edge_vector[1]]
-                # print("start_p: {0}\nend_p: {1}".format(start_p, end_p))
+                if edge_vector[0] == 0:
+                    p_list = [[midpoint[0], 0], [midpoint[0], 600]]
+                elif edge_vector[1] == 0:
+                    p_list = [[0, midpoint[1]], [600, midpoint[1]]]
+                else:
+                    slope = edge_vector[1] / edge_vector[0]
+                    tmp_list = [[0, midpoint[1] - slope * midpoint[0]], [600, midpoint[1] + (600 - midpoint[0]) * slope], \
+                        [midpoint[0] - (midpoint[1] / slope), 0], [midpoint[0] + (600 - midpoint[1]) / slope, 600]]
+                    # remove points outside the canvas and points not on the same direction as edge_vector
+                    p_list = [p for p in tmp_list if self.valid_p_list(p, edge_vector, circumcenter)]
                 """
                 Ensure that the edge will be shown in the GUI window
                 """
-                if (start_p[0] > 800 or start_p[1] > 600) and (edge_vector[0] < 0 or edge_vector[1] < 0):
-                    while end_p[0] > 0 and end_p[1] > 0:
-                        end_p = [end_p[0] + edge_vector[0], end_p[1] + edge_vector[1]]
-                elif (start_p[0] < 0 or start_p[1] < 0) and (edge_vector[0] > 0 or edge_vector[1] > 0):
-                    while end_p[0] < 800 and end_p[1] < 600:
-                        end_p = [end_p[0] + edge_vector[0], end_p[1] + edge_vector[1]]
-                elif start_p[0] > 0 and start_p[0] < 800 and start_p[1] > 0 and start_p[1] < 600:
-                    if edge_vector[0] < 0 or edge_vector[1] < 0:
-                        while end_p[0] > 0 and end_p[1] > 0:
-                            end_p = [end_p[0] + edge_vector[0], end_p[1] + edge_vector[1]]
-                    elif edge_vector[0] > 0 or edge_vector[1] > 0:
-                        while end_p[0] < 800 and end_p[1] < 600:
-                            end_p = [end_p[0] + edge_vector[0], end_p[1] + edge_vector[1]]
+                end_p = p_list[0]
+                if circumcenter[0] < 0 or circumcenter[0] > 600 or circumcenter[0] < 0 or circumcenter[1] > 600:
+                    # circumcenter is outside the canvas, adject the start_p
+                    start_p = p_list[1]
+                else:
+                    start_p = circumcenter
                 draw_diagram_ele_list[1][0][0].append(int(start_p[0]))
                 draw_diagram_ele_list[1][0][1].append(int(start_p[1]))
                 draw_diagram_ele_list[1][1][0].append(int(end_p[0]))
                 draw_diagram_ele_list[1][1][1].append(int(end_p[1]))
                 
         else:
-            print("4 point or more: currently cannot deal with")
+            print("4-point or more: currently cannot deal with")
             draw_diagram_ele_list = None
 
         self.last_diagram = draw_diagram_ele_list
