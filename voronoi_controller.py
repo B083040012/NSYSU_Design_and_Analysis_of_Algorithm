@@ -80,25 +80,31 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.diagram_widget.canvas.draw()
 
     def open_file(self, type):
-        filename, filetype = QFileDialog.getOpenFileName(self, "Open File", './test_data')
-        if type == "point":
-            self.vonoroi.read_file(filename, type)
-            if len(self.vonoroi.test_case_list) <= 0:
-                return -1
-            self.ui.diagram_widget.canvas.axes.clear()
-            self.ui.messageLabel.setText("Please press next case button")
-        elif type == "diagram":
-            tmp_voronoi = myVoronoiDiagram()
-            tmp_voronoi.read_file(filename, type)
-            self.ui.diagram_widget.canvas.axes.clear()
-            self.plot_point(tmp_voronoi.diagram_ele_list[0][0], tmp_voronoi.diagram_ele_list[0][1])
-            self.plot_diagram(tmp_voronoi.diagram_ele_list)
+        try:
+            filename, filetype = QFileDialog.getOpenFileName(self, "Open File", './test_data')
+            if type == "point":
+                self.vonoroi.read_file(filename, type)
+                if len(self.vonoroi.test_case_list) <= 0:
+                    return -1
+                self.ui.diagram_widget.canvas.axes.clear()
+                self.ui.messageLabel.setText("Please press next case button")
+            elif type == "diagram":
+                tmp_voronoi = myVoronoiDiagram()
+                tmp_voronoi.read_file(filename, type)
+                self.ui.diagram_widget.canvas.axes.clear()
+                self.plot_point(tmp_voronoi.diagram_ele_list[0][0], tmp_voronoi.diagram_ele_list[0][1])
+                self.plot_diagram(tmp_voronoi.diagram_ele_list)
+        except:
+            print("error when opening {0}".format(type))
+            return
 
     def save_diagram(self):
-        filename, filepath = QFileDialog.getSaveFileName(self, 'Save File', './test_data')
-        self.vonoroi.save_diagram(filename)
-
-        return
+        try:
+            filename, filepath = QFileDialog.getSaveFileName(self, 'Save File', './test_data')
+            self.vonoroi.save_diagram(filename)
+        except:
+            print("error when saving diagram")
+            return
 
     def next_case(self):
         x_list, y_list = self.vonoroi.next_case()
