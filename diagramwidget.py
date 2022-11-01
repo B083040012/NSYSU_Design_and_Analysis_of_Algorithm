@@ -14,7 +14,7 @@ class diagramWidget(QWidget):
 
     def reset(self):
         self.canvas.axes.clear()
-        self.canvas.axes.set_xlim([0, 800])
+        self.canvas.axes.set_xlim([0, 600])
         self.canvas.axes.set_ylim([0, 600])
         self.canvas.axes.invert_yaxis()
         self.canvas.draw()

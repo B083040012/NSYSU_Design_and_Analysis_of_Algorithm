@@ -23,7 +23,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         # connect the matplotlib to the event method
         self.ui.diagram_widget.canvas.mpl_connect("motion_notify_event", self.diagram_move)
         self.ui.diagram_widget.canvas.mpl_connect("button_press_event", self.diagram_press)
-        self.ui.diagram_widget.canvas.axes.set_xlim([0, 800])
+        self.ui.diagram_widget.canvas.axes.set_xlim([0, 600])
         self.ui.diagram_widget.canvas.axes.set_ylim([0, 600])
         self.ui.diagram_widget.canvas.axes.invert_yaxis()
 
@@ -53,7 +53,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         if x is None or y is None:
             print("invalid coordinate!!")
         elif self.file_case_set != None:
-            print("add point on x = {0}, y = {1}".format(x, y))
+            # print("add point on x = {0}, y = {1}".format(x, y))
             # add point into file case
             self.file_case_set.add(tuple([x, y]))
             old_message = self.ui.messageLabel.text()
@@ -66,7 +66,7 @@ class MainWindowController(QtWidgets.QMainWindow):
 
     def plot_point(self, x = None, y = None):
         if x is not None and y is not None:
-            self.ui.diagram_widget.canvas.axes.set_xlim([0, 800])
+            self.ui.diagram_widget.canvas.axes.set_xlim([0, 600])
             self.ui.diagram_widget.canvas.axes.set_ylim([0, 600])
             self.ui.diagram_widget.canvas.axes.invert_yaxis()
             self.ui.diagram_widget.canvas.axes.scatter(x, y)
