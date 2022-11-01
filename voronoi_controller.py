@@ -1,10 +1,5 @@
-from PIL import ImageQt, Image
-from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QLabel
-from PyQt5.QtCore import QEvent
-from matplotlib.backend_bases import MouseButton
-from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
-import matplotlib.pyplot as plt
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QFileDialog
 
 from voronoi_GUI import Ui_MainWindow
 from my_voronoi import myVoronoiDiagram
@@ -124,29 +119,36 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.plot_point(x = x_list, y = y_list)
 
         return
+    
+    def next_step(self):
+        pass
 
     def run_voronoi(self):
         # handle the custom_case_set
         current_case = list()
         current_case.append([])
         current_case.append([])
-        if len(self.custom_case_set) != 0:
-            for cor in self.custom_case_set:
-                current_case[0].append(cor[0])
-                current_case[1].append(cor[1])
-        elif len(self.file_case_set) != 0:
-            for cor in self.file_case_set:
-                current_case[0].append(cor[0])
-                current_case[1].append(cor[1])
-        else:
-            current_case = self.vonoroi.current_case
-        # sorted by x value before drawing the diagram
-        current_case = sorted(zip(*current_case), key = lambda x: x[0])
-        draw_result = self.vonoroi.draw_voronoi_diagram(current_case)
-        if draw_result is None:
-            print("cannot draw the diagram (point_num < 2 or point_num >3)")
-        else:
-            self.plot_diagram(draw_result)
+        try:
+            if len(self.custom_case_set) != 0:
+                for cor in self.custom_case_set:
+                    current_case[0].append(cor[0])
+                    current_case[1].append(cor[1])
+            elif len(self.file_case_set) != 0:
+                for cor in self.file_case_set:
+                    current_case[0].append(cor[0])
+                    current_case[1].append(cor[1])
+            else:
+                current_case = self.vonoroi.current_case
+            # sorted by x value before drawing the diagram
+            current_case = sorted(zip(*current_case), key = lambda x: x[0])
+            draw_result = self.vonoroi.draw_voronoi_diagram(current_case)
+            if draw_result is None:
+                print("cannot draw the diagram (point_num < 2 or point_num >3)")
+            else:
+                self.plot_diagram(draw_result)
+        except:
+            print("error when running diagram")
+            return
         # reset custom_case_set and file_case
         self.custom_case_set = set()
         self.file_case_set = None
