@@ -219,9 +219,11 @@ class myVoronoiDiagram():
                     edge_vector[0] = -edge_vector[0]
                     edge_vector[1] = -edge_vector[1]
                 if edge_vector[0] == 0:
-                    p_list = [[midpoint[0], 0], [midpoint[0], 600]]
+                    tmp_list = [[midpoint[0], 0], [midpoint[0], 600]]
+                    p_list = [p for p in tmp_list if ((p[1] - circumcenter[1]) * edge_vector[1] >= 0)]
                 elif edge_vector[1] == 0:
-                    p_list = [[0, midpoint[1]], [600, midpoint[1]]]
+                    tmp_list = [[0, midpoint[1]], [600, midpoint[1]]]
+                    p_list = [p for p in tmp_list if ((p[0] - circumcenter[0]) * edge_vector[0] >= 0)]
                 else:
                     slope = edge_vector[1] / edge_vector[0]
                     tmp_list = [[0, midpoint[1] - slope * midpoint[0]], [600, midpoint[1] + (600 - midpoint[0]) * slope], \
