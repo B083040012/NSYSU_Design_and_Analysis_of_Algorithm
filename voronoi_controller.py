@@ -35,6 +35,8 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.file_case_set = None
         self.vonoroi = myVoronoiDiagram()
         self.plot_point()
+        self.queue_index = 0
+        self.step_cnt = 0
 
     def diagram_move(self, event):
         x = int(event.xdata) if event.xdata != None else None
@@ -59,19 +61,62 @@ class MainWindowController(QtWidgets.QMainWindow):
             self.custom_case_set.add(tuple([x, y]))
             self.plot_point(x, y)
 
-    def plot_point(self, x = None, y = None):
+    def plot_point(self, x = None, y = None, point_list = None):
+        self.ui.diagram_widget.canvas.axes.set_xlim([0, 600])
+        self.ui.diagram_widget.canvas.axes.set_ylim([0, 600])
+        self.ui.diagram_widget.canvas.axes.invert_yaxis()
         if x is not None and y is not None:
-            self.ui.diagram_widget.canvas.axes.set_xlim([0, 600])
-            self.ui.diagram_widget.canvas.axes.set_ylim([0, 600])
-            self.ui.diagram_widget.canvas.axes.invert_yaxis()
-            self.ui.diagram_widget.canvas.axes.scatter(x, y)
+            self.ui.diagram_widget.canvas.axes.scatter(x, y, color = "blue")
+        elif point_list is not None:
+            for p in point_list:
+                self.ui.diagram_widget.canvas.axes.scatter(p[0], p[1], color = "blue")
         self.ui.diagram_widget.canvas.draw()
 
     def plot_diagram(self, ele_list):
         for i in range(0, len(ele_list[1][0][0])):
             tmp_x = [ele_list[1][0][0][i], ele_list[1][1][0][i]]
             tmp_y = [ele_list[1][0][1][i], ele_list[1][1][1][i]]
-            self.ui.diagram_widget.canvas.axes.plot(tmp_x, tmp_y)
+            self.ui.diagram_widget.canvas.axes.plot(tmp_x, tmp_y, color = "blue")
+        self.ui.diagram_widget.canvas.draw()
+
+    def plot_convex_hull(self, ele_list):
+        for i in range(0, len(ele_list[1][0][0])):
+            tmp_x = [ele_list[1][0][0][i], ele_list[1][1][0][i]]
+            tmp_y = [ele_list[1][0][1][i], ele_list[1][1][1][i]]
+            # if self.step_cnt == 0:
+            #     self.ui.diagram_widget.canvas.axes.scatter(tmp_x, tmp_y, color = "yellow")
+            # elif self.step_cnt == 1:
+            #     self.ui.diagram_widget.canvas.axes.scatter(tmp_x, tmp_y, color = "black")
+            self.ui.diagram_widget.canvas.axes.plot(tmp_x, tmp_y, color = "red", linestyle = ':')
+        self.ui.diagram_widget.canvas.draw()
+
+    def plot_voronoi_edge(self, ele_list, color = None):
+        for i in range(0, len(ele_list[1][0][0])):
+            tmp_x = [ele_list[1][0][0][i], ele_list[1][1][0][i]]
+            tmp_y = [ele_list[1][0][1][i], ele_list[1][1][1][i]]
+            if self.step_cnt == 0:
+                self.ui.diagram_widget.canvas.axes.plot(tmp_x, tmp_y, color = "blue")
+            elif self.step_cnt == 1:
+                self.ui.diagram_widget.canvas.axes.plot(tmp_x, tmp_y, color = "green")
+            if color is not None:
+                self.ui.diagram_widget.canvas.axes.plot(tmp_x, tmp_y, color = color)
+        for i in range(0, len(ele_list[0][0])):
+            tmp_x = ele_list[0][0][i]
+            tmp_y = ele_list[0][1][i]
+            if self.step_cnt == 0:
+                self.ui.diagram_widget.canvas.axes.scatter(tmp_x, tmp_y, color = "blue")
+            elif self.step_cnt == 1:
+                self.ui.diagram_widget.canvas.axes.scatter(tmp_x, tmp_y, color = "green")
+            if color is not None:
+                self.ui.diagram_widget.canvas.axes.scatter(tmp_x, tmp_y, color = color)
+                
+        self.ui.diagram_widget.canvas.draw()
+
+    def plot_hyperplane(self, ele_list):
+        for i in range(0, len(ele_list[0][0])):
+            tmp_x = [ele_list[0][0][i], ele_list[1][0][i]]
+            tmp_y = [ele_list[0][1][i], ele_list[1][1][i]]
+            self.ui.diagram_widget.canvas.axes.plot(tmp_x, tmp_y, color = "orange")
         self.ui.diagram_widget.canvas.draw()
 
     def open_file(self, type):
@@ -102,6 +147,9 @@ class MainWindowController(QtWidgets.QMainWindow):
             return
 
     def next_case(self):
+        self.ui.diagram_widget.reset()
+        self.custom_case_set = set()
+        self.file_case_set = None
         x_list, y_list = self.vonoroi.next_case()
         self.file_case_set = self.vonoroi.current_case
         if x_list == -1 or y_list == -1:
@@ -121,34 +169,58 @@ class MainWindowController(QtWidgets.QMainWindow):
         return
     
     def next_step(self):
-        pass
+        if self.queue_index < len(self.vonoroi.paint_queue):
+            self.ui.diagram_widget.canvas.axes.clear()
+            if self.step_cnt == 2:
+                self.ui.diagram_widget.canvas.axes.set_xlim([0, 600])
+                self.ui.diagram_widget.canvas.axes.set_ylim([0, 600])
+                self.ui.diagram_widget.canvas.axes.invert_yaxis()
+                self.plot_convex_hull(self.vonoroi.paint_queue[self.queue_index][0])
+                self.plot_voronoi_edge(self.vonoroi.paint_queue[self.queue_index - 1][1], color = "green")
+                self.plot_voronoi_edge(self.vonoroi.paint_queue[self.queue_index - 2][1], color = "blue")
+                self.plot_hyperplane(self.vonoroi.paint_queue[self.queue_index][2])
+                self.step_cnt += 1
+                self.step_cnt = self.step_cnt % 3
+                self.queue_index += 1
+                return
+            self.plot_point(point_list = self.current_case)
+            self.plot_convex_hull(self.vonoroi.paint_queue[self.queue_index][0])
+            self.plot_voronoi_edge(self.vonoroi.paint_queue[self.queue_index][1])
+            self.step_cnt += 1
+            self.step_cnt = self.step_cnt % 3
+            # if self.vonoroi.paint_queue[self.queue_index][2] is not None:
+            #     self.plot_hyperplane(self.vonoroi.paint_queue[self.queue_index][2])
+            self.queue_index += 1
+        return
 
     def run_voronoi(self):
         # handle the custom_case_set
-        current_case = list()
-        current_case.append([])
-        current_case.append([])
-        try:
-            if len(self.custom_case_set) != 0:
-                for cor in self.custom_case_set:
-                    current_case[0].append(cor[0])
-                    current_case[1].append(cor[1])
-            elif len(self.file_case_set) != 0:
-                for cor in self.file_case_set:
-                    current_case[0].append(cor[0])
-                    current_case[1].append(cor[1])
-            else:
-                current_case = self.vonoroi.current_case
-            # sorted by x value before drawing the diagram
-            current_case = sorted(zip(*current_case), key = lambda x: x[0])
-            draw_result = self.vonoroi.draw_voronoi_diagram(current_case)
-            if draw_result is None:
-                print("cannot draw the diagram (point_num < 2 or point_num >3)")
-            else:
-                self.plot_diagram(draw_result)
-        except:
-            print("error when running diagram")
-            return
+        self.current_case = list()
+        self.current_case.append([])
+        self.current_case.append([])
+        # try:
+        if len(self.custom_case_set) != 0:
+            for cor in self.custom_case_set:
+                self.current_case[0].append(cor[0])
+                self.current_case[1].append(cor[1])
+        elif len(self.file_case_set) != 0:
+            for cor in self.file_case_set:
+                self.current_case[0].append(cor[0])
+                self.current_case[1].append(cor[1])
+        else:
+            self.current_case = self.vonoroi.current_case
+        # sorted by x value before drawing the diagram
+        self.current_case = sorted(zip(*self.current_case), key = lambda x: x[0])
+        draw_result = self.vonoroi.draw_voronoi_diagram(self.current_case)
+        if draw_result is None and self.vonoroi.paint_queue_flag == False:
+            print("cannot draw the diagram")
+        elif self.vonoroi.paint_queue_flag == True:
+            print("divide and conquer done, please press the next step button for display the result")
+        else:
+            self.plot_diagram(draw_result)
+        # except:
+        #     print("error when running diagram")
+        #     return
         # reset custom_case_set and file_case
         self.custom_case_set = set()
         self.file_case_set = None
@@ -161,5 +233,8 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.file_case_set = None
         self.vonoroi = myVoronoiDiagram()
         self.ui.messageLabel.setText("")
+        self.vonoroi.paint_queue_flag = False
+        self.vonoroi.paint_queue = list()
+        self.queue_index = 0
 
         return
