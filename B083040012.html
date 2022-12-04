@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>
+        Voronoi Diagram Final Report - HackMD
+    </title>
+    <link rel="icon" type="image/png" href="https://hackmd.io/favicon.png">
+    <link rel="apple-touch-icon" href="https://hackmd.io/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/3.5.0/octicons.min.css" integrity="sha256-QiWfLIsCT02Sdwkogf6YMiQlj4NE84MKkzEMkZnMGdg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css" integrity="sha256-vtR0hSWRc3Tb26iuN2oZHt3KRUomwTufNIf5/4oeCyg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/css/basic/emojify.min.css" integrity="sha256-UOrvMOsSDSrW6szVLe8ZDZezBxh5IoIfgTwdNDgTjiU=" crossorigin="anonymous" />
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i|Source+Code+Pro:300,400,500|Source+Sans+Pro:300,300i,400,400i,600,600i|Source+Serif+Pro&subset=latin-ext);.hljs{background:#fff;color:#333;display:block;overflow-x:auto;padding:.5em}.hljs-comment,.hljs-meta{color:#969896}.hljs-emphasis,.hljs-quote,.hljs-string,.hljs-strong,.hljs-template-variable,.hljs-variable{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-attribute,.hljs-bullet,.hljs-literal,.hljs-number,.hljs-symbol{color:#0086b3}.hljs-built_in,.hljs-builtin-name{color:#005cc5}.hljs-name,.hljs-section{color:#63a35c}.hljs-tag{color:#333}.hljs-attr,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-selector-pseudo,.hljs-title{color:#795da3}.hljs-addition{background-color:#eaffea;color:#55a532}.hljs-deletion{background-color:#ffecec;color:#bd2c00}.hljs-link{text-decoration:underline}.markdown-body{word-wrap:break-word;font-size:16px;line-height:1.5}.markdown-body:after,.markdown-body:before{content:"";display:table}.markdown-body:after{clear:both}.markdown-body>:first-child{margin-top:0!important}.markdown-body>:last-child{margin-bottom:0!important}.markdown-body a:not([href]){color:inherit;text-decoration:none}.markdown-body .absent{color:#c00}.markdown-body .anchor{float:left;line-height:1;margin-left:-20px;padding-right:4px}.markdown-body .anchor:focus{outline:none}.markdown-body blockquote,.markdown-body dl,.markdown-body ol,.markdown-body p,.markdown-body pre,.markdown-body table,.markdown-body ul{margin-bottom:16px;margin-top:0}.markdown-body hr{background-color:#e7e7e7;border:0;height:.25em;margin:24px 0;padding:0}.markdown-body blockquote{border-left:.25em solid #ddd;color:#777;font-size:16px;padding:0 1em}.markdown-body blockquote>:first-child{margin-top:0}.markdown-body blockquote>:last-child{margin-bottom:0}.markdown-body kbd,.popover kbd{background-color:#fcfcfc;border:1px solid;border-color:#ccc #ccc #bbb;border-radius:3px;box-shadow:inset 0 -1px 0 #bbb;color:#555;display:inline-block;font-size:11px;line-height:10px;padding:3px 5px;vertical-align:middle}.markdown-body .loweralpha{list-style-type:lower-alpha}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{font-weight:600;line-height:1.25;margin-bottom:16px;margin-top:24px}.markdown-body h1 .octicon-link,.markdown-body h2 .octicon-link,.markdown-body h3 .octicon-link,.markdown-body h4 .octicon-link,.markdown-body h5 .octicon-link,.markdown-body h6 .octicon-link{color:#000;vertical-align:middle;visibility:hidden}.markdown-body h1:hover .anchor,.markdown-body h2:hover .anchor,.markdown-body h3:hover .anchor,.markdown-body h4:hover .anchor,.markdown-body h5:hover .anchor,.markdown-body h6:hover .anchor{text-decoration:none}.markdown-body h1:hover .anchor .octicon-link,.markdown-body h2:hover .anchor .octicon-link,.markdown-body h3:hover .anchor .octicon-link,.markdown-body h4:hover .anchor .octicon-link,.markdown-body h5:hover .anchor .octicon-link,.markdown-body h6:hover .anchor .octicon-link{visibility:visible}.markdown-body h1 code,.markdown-body h1 tt,.markdown-body h2 code,.markdown-body h2 tt,.markdown-body h3 code,.markdown-body h3 tt,.markdown-body h4 code,.markdown-body h4 tt,.markdown-body h5 code,.markdown-body h5 tt,.markdown-body h6 code,.markdown-body h6 tt{font-size:inherit}.markdown-body h1{font-size:2em}.markdown-body h1,.markdown-body h2{border-bottom:1px solid #eee;padding-bottom:.3em}.markdown-body h2{font-size:1.5em}.markdown-body h3{font-size:1.25em}.markdown-body h4{font-size:1em}.markdown-body h5{font-size:.875em}.markdown-body h6{color:#777;font-size:.85em}.markdown-body ol,.markdown-body ul{padding-left:2em}.markdown-body ol.no-list,.markdown-body ul.no-list{list-style-type:none;padding:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-bottom:0;margin-top:0}.markdown-body li>p{margin-top:16px}.markdown-body li+li{padding-top:.25em}.markdown-body dl{padding:0}.markdown-body dl dt{font-size:1em;font-style:italic;font-weight:700;margin-top:16px;padding:0}.markdown-body dl dd{margin-bottom:16px;padding:0 16px}.markdown-body table{display:block;overflow:auto;width:100%;word-break:normal;word-break:keep-all}.markdown-body table th{font-weight:700}.markdown-body table td,.markdown-body table th{border:1px solid #ddd;padding:6px 13px}.markdown-body table tr{background-color:#fff;border-top:1px solid #ccc}.markdown-body table tr:nth-child(2n){background-color:#f8f8f8}.markdown-body img{background-color:#fff;box-sizing:initial;max-width:100%}.markdown-body img[align=right]{padding-left:20px}.markdown-body img[align=left]{padding-right:20px}.markdown-body .emoji{background-color:initial;max-width:none;vertical-align:text-top}.markdown-body span.frame{display:block;overflow:hidden}.markdown-body span.frame>span{border:1px solid #ddd;display:block;float:left;margin:13px 0 0;overflow:hidden;padding:7px;width:auto}.markdown-body span.frame span img{display:block;float:left}.markdown-body span.frame span span{clear:both;color:#333;display:block;padding:5px 0 0}.markdown-body span.align-center{clear:both;display:block;overflow:hidden}.markdown-body span.align-center>span{display:block;margin:13px auto 0;overflow:hidden;text-align:center}.markdown-body span.align-center span img{margin:0 auto;text-align:center}.markdown-body span.align-right{clear:both;display:block;overflow:hidden}.markdown-body span.align-right>span{display:block;margin:13px 0 0;overflow:hidden;text-align:right}.markdown-body span.align-right span img{margin:0;text-align:right}.markdown-body span.float-left{display:block;float:left;margin-right:13px;overflow:hidden}.markdown-body span.float-left span{margin:13px 0 0}.markdown-body span.float-right{display:block;float:right;margin-left:13px;overflow:hidden}.markdown-body span.float-right>span{display:block;margin:13px auto 0;overflow:hidden;text-align:right}.markdown-body code,.markdown-body tt{background-color:#0000000a;border-radius:3px;font-size:85%;margin:0;padding:.2em 0}.markdown-body code:after,.markdown-body code:before,.markdown-body tt:after,.markdown-body tt:before{content:"\00a0";letter-spacing:-.2em}.markdown-body code br,.markdown-body tt br{display:none}.markdown-body del code{text-decoration:inherit}.markdown-body pre{word-wrap:normal}.markdown-body pre>code{background:#0000;border:0;font-size:100%;margin:0;padding:0;white-space:pre;word-break:normal}.markdown-body .highlight{margin-bottom:16px}.markdown-body .highlight pre{margin-bottom:0;word-break:normal}.markdown-body .highlight pre,.markdown-body pre{background-color:#f7f7f7;border-radius:3px;font-size:85%;line-height:1.45;overflow:auto;padding:16px}.markdown-body pre code,.markdown-body pre tt{word-wrap:normal;background-color:initial;border:0;display:inline;line-height:inherit;margin:0;max-width:auto;overflow:visible;padding:0}.markdown-body pre code:after,.markdown-body pre code:before,.markdown-body pre tt:after,.markdown-body pre tt:before{content:normal}.markdown-body .csv-data td,.markdown-body .csv-data th{font-size:12px;line-height:1;overflow:hidden;padding:5px;text-align:left;white-space:nowrap}.markdown-body .csv-data .blob-line-num{background:#fff;border:0;padding:10px 8px 9px;text-align:right}.markdown-body .csv-data tr{border-top:0}.markdown-body .csv-data th{background:#f8f8f8;border-top:0;font-weight:700}.news .alert .markdown-body blockquote{border:0;padding:0 0 0 40px}.activity-tab .news .alert .commits,.activity-tab .news .markdown-body blockquote{padding-left:0}.task-list-item{list-style-type:none}.task-list-item label{font-weight:400}.task-list-item.enabled label{cursor:pointer}.task-list-item+.task-list-item{margin-top:3px}.task-list-item-checkbox{cursor:default!important;float:left;margin:.31em 0 .2em -1.3em!important;vertical-align:middle}.markdown-body{max-width:758px;overflow:visible!important;padding-bottom:40px;padding-top:40px;position:relative}.markdown-body .emoji{vertical-align:top}.markdown-body pre{border:inherit!important}.markdown-body code{color:inherit!important}.markdown-body pre code .wrapper{display:-moz-inline-flex;display:-ms-inline-flex;display:-o-inline-flex;display:inline-flex}.markdown-body pre code .gutter{float:left;overflow:hidden;-webkit-user-select:none;user-select:none}.markdown-body pre code .gutter.linenumber{border-right:3px solid #6ce26c!important;box-sizing:initial;color:#afafaf!important;cursor:default;display:inline-block;min-width:20px;padding:0 8px 0 0;position:relative;text-align:right;z-index:4}.markdown-body pre code .gutter.linenumber>span:before{content:attr(data-linenumber)}.markdown-body pre code .code{float:left;margin:0 0 0 16px}.markdown-body .gist .line-numbers{border-bottom:none;border-left:none;border-top:none}.markdown-body .gist .line-data{border:none}.markdown-body .gist table{border-collapse:inherit!important;border-spacing:0}.markdown-body code[data-gist-id]{background:none;padding:0}.markdown-body code[data-gist-id]:after,.markdown-body code[data-gist-id]:before{content:""}.markdown-body code[data-gist-id] .blob-num{border:unset}.markdown-body code[data-gist-id] table{margin-bottom:unset;overflow:unset}.markdown-body code[data-gist-id] table tr{background:unset}.markdown-body[dir=rtl] pre{direction:ltr}.markdown-body[dir=rtl] code{direction:ltr;unicode-bidi:embed}.markdown-body .alert>p:last-child{margin-bottom:0}.markdown-body pre.abc,.markdown-body pre.flow-chart,.markdown-body pre.graphviz,.markdown-body pre.mermaid,.markdown-body pre.sequence-diagram,.markdown-body pre.vega{background-color:inherit;border-radius:0;overflow:visible;text-align:center;white-space:inherit}.markdown-body pre.abc>code,.markdown-body pre.flow-chart>code,.markdown-body pre.graphviz>code,.markdown-body pre.mermaid>code,.markdown-body pre.sequence-diagram>code,.markdown-body pre.vega>code{text-align:left}.markdown-body pre.abc>svg,.markdown-body pre.flow-chart>svg,.markdown-body pre.graphviz>svg,.markdown-body pre.mermaid>svg,.markdown-body pre.sequence-diagram>svg,.markdown-body pre.vega>svg{height:100%;max-width:100%}.markdown-body pre>code.wrap{word-wrap:break-word;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap}.markdown-body .alert>p:last-child,.markdown-body .alert>ul:last-child{margin-bottom:0}.markdown-body summary{display:list-item}.markdown-body summary:focus{outline:none}.markdown-body details summary{cursor:pointer}.markdown-body details:not([open])>:not(summary){display:none}.markdown-body figure{margin:1em 40px}.markdown-body .mark,.markdown-body mark{background-color:#fff1a7}.vimeo,.youtube{background-color:#000;background-position:50%;background-repeat:no-repeat;background-size:contain;cursor:pointer;display:table;overflow:hidden;text-align:center}.vimeo,.youtube{position:relative;width:100%}.youtube{padding-bottom:56.25%}.vimeo img{object-fit:contain;width:100%;z-index:0}.youtube img{object-fit:cover;z-index:0}.vimeo iframe,.youtube iframe,.youtube img{height:100%;left:0;position:absolute;top:0;width:100%}.vimeo iframe,.youtube iframe{vertical-align:middle;z-index:1}.vimeo .icon,.youtube .icon{color:#fff;height:auto;left:50%;opacity:.3;position:absolute;top:50%;transform:translate(-50%,-50%);transition:opacity .2s;width:auto;z-index:0}.vimeo:hover .icon,.youtube:hover .icon{opacity:.6;transition:opacity .2s}.slideshare .inner,.speakerdeck .inner{position:relative;width:100%}.slideshare .inner iframe,.speakerdeck .inner iframe{bottom:0;height:100%;left:0;position:absolute;right:0;top:0;width:100%}.figma{display:table;padding-bottom:56.25%;position:relative;width:100%}.figma iframe{border:1px solid #eee;bottom:0;height:100%;left:0;position:absolute;right:0;top:0;width:100%}.markmap-container{height:300px}.markmap-container>svg{height:100%;width:100%}.MJX_Assistive_MathML{display:none}#MathJax_Message{z-index:1000!important}.ui-infobar{color:#777;margin:25px auto -25px;max-width:760px;position:relative;z-index:2}.toc .invisable-node{list-style-type:none}.ui-toc{bottom:20px;position:fixed;z-index:998}.ui-toc.both-mode{margin-left:8px}.ui-toc.both-mode .ui-toc-label{border-bottom-left-radius:0;border-top-left-radius:0;height:40px;padding:10px 4px}.ui-toc-label{background-color:#e6e6e6;border:none;color:#868686;transition:opacity .2s}.ui-toc .open .ui-toc-label{color:#fff;opacity:1;transition:opacity .2s}.ui-toc-label:focus{background-color:#ccc;color:#000;opacity:.3}.ui-toc-label:hover{background-color:#ccc;opacity:1;transition:opacity .2s}.ui-toc-dropdown{margin-bottom:20px;margin-top:20px;max-height:70vh;max-width:45vw;overflow:auto;padding-left:10px;padding-right:10px;text-align:inherit;width:25vw}.ui-toc-dropdown>.toc{max-height:calc(70vh - 100px);overflow:auto}.ui-toc-dropdown[dir=rtl] .nav{letter-spacing:.0029em;padding-right:0}.ui-toc-dropdown a{overflow:hidden;text-overflow:ellipsis;white-space:pre}.ui-toc-dropdown .nav>li>a{color:#767676;display:block;font-size:13px;font-weight:500;padding:4px 20px}.ui-toc-dropdown .nav>li:first-child:last-child>ul,.ui-toc-dropdown .toc.expand ul{display:block}.ui-toc-dropdown .nav>li>a:focus,.ui-toc-dropdown .nav>li>a:hover{background-color:initial;border-left:1px solid #000;color:#000;padding-left:19px;text-decoration:none}.ui-toc-dropdown[dir=rtl] .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav>li>a:hover{border-left:none;border-right:1px solid #000;padding-right:19px}.ui-toc-dropdown .nav>.active:focus>a,.ui-toc-dropdown .nav>.active:hover>a,.ui-toc-dropdown .nav>.active>a{background-color:initial;border-left:2px solid #000;color:#000;font-weight:700;padding-left:18px}.ui-toc-dropdown[dir=rtl] .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav>.active>a{border-left:none;border-right:2px solid #000;padding-right:18px}.ui-toc-dropdown .nav .nav{display:none;padding-bottom:10px}.ui-toc-dropdown .nav>.active>ul{display:block}.ui-toc-dropdown .nav .nav>li>a{font-size:12px;font-weight:400;padding-bottom:1px;padding-left:30px;padding-top:1px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a{padding-right:30px}.ui-toc-dropdown .nav .nav>li>ul>li>a{font-size:12px;font-weight:400;padding-bottom:1px;padding-left:40px;padding-top:1px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a{padding-right:40px}.ui-toc-dropdown .nav .nav>li>a:focus,.ui-toc-dropdown .nav .nav>li>a:hover{padding-left:29px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:hover{padding-right:29px}.ui-toc-dropdown .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>a:hover{padding-left:39px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:hover{padding-right:39px}.ui-toc-dropdown .nav .nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>a{font-weight:500;padding-left:28px}.ui-toc-dropdown[dir=rtl] .nav .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>a{padding-right:28px}.ui-toc-dropdown .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>a{font-weight:500;padding-left:38px}.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>a{padding-right:38px}.markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html[lang^=ja] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ ゴシック,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html[lang=zh-tw] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html[lang=zh-cn] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html .markdown-body[lang^=ja]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ ゴシック,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html .markdown-body[lang=zh-tw]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html .markdown-body[lang=zh-cn]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html[lang^=ja] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ Ｐゴシック,sans-serif}html[lang=zh-tw] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html[lang=zh-cn] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}html .ui-toc-dropdown[lang^=ja]{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ Ｐゴシック,sans-serif}html .ui-toc-dropdown[lang=zh-tw]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html .ui-toc-dropdown[lang=zh-cn]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}.ui-affix-toc{max-height:70vh;max-width:15vw;overflow:auto;position:fixed;top:0}.back-to-top,.expand-toggle,.go-to-bottom{color:#999;display:block;font-size:12px;font-weight:500;margin-left:10px;margin-top:10px;padding:4px 10px}.back-to-top:focus,.back-to-top:hover,.expand-toggle:focus,.expand-toggle:hover,.go-to-bottom:focus,.go-to-bottom:hover{color:#563d7c;text-decoration:none}.back-to-top,.go-to-bottom{margin-top:0}.ui-user-icon{background-position:50%;background-repeat:no-repeat;background-size:cover;border-radius:50%;display:block;height:20px;margin-bottom:2px;margin-right:5px;margin-top:2px;width:20px}.ui-user-icon.small{display:inline-block;height:18px;margin:0 0 .2em;vertical-align:middle;width:18px}.ui-infobar>small>span{line-height:22px}.ui-infobar>small .dropdown{display:inline-block}.ui-infobar>small .dropdown a:focus,.ui-infobar>small .dropdown a:hover{text-decoration:none}.ui-more-info{color:#888;cursor:pointer;vertical-align:middle}.ui-more-info .fa{font-size:16px}.ui-connectedGithub,.ui-published-note{color:#888}.ui-connectedGithub{line-height:23px;white-space:nowrap}.ui-connectedGithub a.file-path{color:#888;padding-left:22px;text-decoration:none}.ui-connectedGithub a.file-path:active,.ui-connectedGithub a.file-path:hover{color:#888;text-decoration:underline}.ui-connectedGithub .fa{font-size:20px}.ui-published-note .fa{font-size:20px;vertical-align:top}.unselectable{-webkit-user-select:none;-o-user-select:none;user-select:none}.selectable{-webkit-user-select:text;-o-user-select:text;user-select:text}.inline-spoiler-section{cursor:pointer}.inline-spoiler-section .spoiler-text{background-color:#333;border-radius:2px}.inline-spoiler-section .spoiler-text>*{opacity:0}.inline-spoiler-section .spoiler-img{filter:blur(10px)}.inline-spoiler-section.raw{background-color:#333;border-radius:2px}.inline-spoiler-section.raw>*{opacity:0}.inline-spoiler-section.unveil{cursor:auto}.inline-spoiler-section.unveil .spoiler-text{background-color:#3333331a}.inline-spoiler-section.unveil .spoiler-text>*{opacity:1}.inline-spoiler-section.unveil .spoiler-img{filter:none}@media print{blockquote,div,img,pre,table{page-break-inside:avoid!important}a[href]:after{font-size:12px!important}}.markdown-body.slides{color:#222;position:relative;z-index:1}.markdown-body.slides:before{background-color:currentColor;bottom:0;box-shadow:0 0 0 50vw;content:"";display:block;left:0;position:absolute;right:0;top:0;z-index:-1}.markdown-body.slides section[data-markdown]{background-color:#fff;margin-bottom:1.5em;position:relative;text-align:center}.markdown-body.slides section[data-markdown] code{text-align:left}.markdown-body.slides section[data-markdown]:before{content:"";display:block;padding-bottom:56.23%}.markdown-body.slides section[data-markdown]>div:first-child{left:1em;max-height:100%;overflow:hidden;position:absolute;right:1em;top:50%;transform:translateY(-50%)}.markdown-body.slides section[data-markdown]>ul{display:inline-block}.markdown-body.slides>section>section+section:after{border:3px solid #777;content:"";height:1.5em;position:absolute;right:1em;top:-1.5em}.site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,sans-serif}html[lang^=ja] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ ゴシック,sans-serif}html[lang=zh-tw] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}body{font-smoothing:subpixel-antialiased!important;-webkit-font-smoothing:subpixel-antialiased!important;-moz-osx-font-smoothing:auto!important;-webkit-overflow-scrolling:touch;font-family:Source Sans Pro,Helvetica,Arial,sans-serif;letter-spacing:.025em}html[lang^=ja] body{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ ゴシック,sans-serif}html[lang=zh-tw] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}abbr[data-original-title],abbr[title]{cursor:help}body.modal-open{overflow-y:auto;padding-right:0!important}svg{text-shadow:none}
+    </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js" integrity="sha256-g6iAfvZp+nDQ2TdTR/VVKJf3bGro4ub5fvWSWVRi2NE=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js" integrity="sha256-8E4Is26QH0bD52WoQpcB+R/tcWQtpzlCojrybUd7Mxo=" crossorigin="anonymous"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div id="doc" class="markdown-body container-fluid comment-enabled" data-hard-breaks="true"><div class="embed-note"><style>
+
+:root{
+    --white-text: #ddd;
+    --white-gray-text: #bbb;
+    --black-text: #333;
+    --gray-text: #666;
+    --navbar-background: #242424;
+    --navbar-alt-background: #363636;
+    --gray-background: #23272a;
+    --darkblue-background: #40788A;
+    --darkblue-alt-background: #2c5460;
+    --link-text: #339fff;
+    --link-hover-text: #2d6da4;
+}
+
+body,
+.ui-comment-container .ui-comments-container {
+    background-color: var(--gray-background) !important;
+    font-size: 1em !important;
+}
+
+a{
+    color: var(--link-text);
+}
+a:hover,
+a:active{
+    color: var(--link-hover-text);
+}
+.navbar-default,
+.navbar-default * label,
+.navbar-default * span,
+.ui-comment-container .ui-comment-header,
+.ui-comment-container .ui-comment-input-container{
+    background-color: var(--navbar-background);
+    color: var(--white-text);
+    border-color: var(--gray-text);
+}
+
+.modal-dialog * .modal-body{
+    
+    background-color: var(--navbar-background) !important;
+    color: var(--white-text) !important;
+    font-size: 2em; !important;
+}
+.ui-notification-label{
+    color: var(--white-text) !important;
+    background-color: var(--darkblue-background);
+    border-color: var(--darkblue-alt-background) !important;
+}
+.ui-notification-label:hover,
+.ui-notification-label:active,
+.ui-notification-label:focus{
+    background-color: var(--darkblue-alt-background);
+}
+
+.navbar-default .announcement-popover * ,
+.modal-dialog * .modal-header,
+.modal-dialog * .modal-footer,
+.panel > .panel-heading,
+.panel-body{
+    background-color: var(--gray-background) !important;
+    color: var(--white-text) !important;
+}
+
+.dropdown-menu,
+.dropdown-menu>li>a{
+    background-color: var(--gray-background) ;
+    color: var(--white-text);
+}
+
+.markdown-body,
+.ui-toc-dropdown .nav > .active > a,
+.ui-comment-container .comment-blank-stats,
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link{
+    color: var(--white-text);
+}
+.ui-toc-dropdown .nav > .active > a:hover{
+    color: var(--gray-text);
+}
+
+.ui-lastchange,
+.ui-status-lastchange{
+    color: var(--white-gray-text);
+}
+
+.markdown-body > blockquote{
+    border-left: 0.25em solid #5882a7;
+    color: var(--white-gray-text);
+}
+
+.markdown-body > table th,
+.markdown-body > table tr:nth-child(2n){
+    background-color: var(--navbar-background);
+}
+
+.markdown-body > table tr{
+    background-color: var(--navbar-alt-background);
+}
+
+.panel-body .markdown-body tr{
+    background-color: var(--navbar-background);
+    border-color: var(--navbar-background);
+}
+
+.alert > blockquote{
+    border-left: 0.25em solid #ccc;
+}
+
+.ui-toc-dropdown {
+    background-color: #23272A;
+    border: 1px solid rgba(255,255,255,.15);
+    box-shadow: 0 6px 12px rgba(255,255,255,.175);
+}
+
+/* Dark mode code block */
+/* Imported from titangene/hackmd-dark-theme */
+
+.markdown-body pre {
+    background-color: #1e1e1e;
+    border: 1px solid #555 !important;
+    color: #dfdfdf;
+    font-weight: 600;
+}
+.token.operator, .token.entity,
+.token.url, .language-css .token.string,
+.style .token.string {
+    background: unset;
+}
+
+/* Dark mode alert boxes */
+
+.alert-info {
+    color: #f3fdff;
+    background: #40788A;
+    border-color: #2F7A95;
+}
+
+.alert-warning {
+    color: #fffaf2;
+    background: #936C36;
+    border-color: #AE8443;
+}
+
+.alert-danger {
+    color: #fff4f4;
+    background: #834040;
+    border-color: #8C2F2F
+}
+
+.alert-success {
+    color: #F4FFF2;
+    background-color: #436643;
+    border-color: #358A28;
+}
+
+/* Stylized alert boxes */
+
+.alert-warning>p::before,
+.alert-danger>p::before,
+.alert-info>p::before {
+    white-space: pre;
+    font-weight: bold;
+}
+
+</style>
+<!-- span color class definition -->
+<style>
+    .blue {
+        color: #5FCCFA;
+    }
+    .red{
+        color: #FE4949;
+    }
+    .orange{
+        color: #FE7424
+    }
+    .green{
+        color: #69F485;
+    }
+    .yellow{
+        color: #FFFF00;
+    }
+    .pink{
+        color: #F518E0;
+    }
+    .purple{
+        color: #BB02C9;
+    }
+</style>
+</div><h1 id="Voronoi-Diagram-Final-Report" data-id="Voronoi-Diagram-Final-Report"><a class="anchor hidden-xs" href="#Voronoi-Diagram-Final-Report" title="Voronoi-Diagram-Final-Report"><span class="octicon octicon-link"></span></a><span>Voronoi Diagram Final Report</span></h1><div class="alert alert-info">
+<ul>
+<li><span>題目：Voronoi Diagram實做（Divide and Conquer Approach）</span></li>
+<li><span>系級：資工系112</span></li>
+<li><span>姓名：陳柏翰</span></li>
+<li><span>學號：B083040012</span></li>
+</ul>
+</div><div class="alert alert-warning">
+<p><span>因執行檔容量較大，無法上傳至網路大學，可至</span><a href="https://drive.google.com/drive/folders/1hqMYflHBQQwFFTXKUR3JXCpPX57dzPho?usp=sharing" target="_blank" rel="noopener"><span>link</span></a><span>下載，謝謝！</span></p>
+</div><h2 id="軟體規格書" data-id="軟體規格書"><a class="anchor hidden-xs" href="#軟體規格書" title="軟體規格書"><span class="octicon octicon-link"></span></a><span>軟體規格書</span></h2><h3 id="輸入輸出格式" data-id="輸入輸出格式"><a class="anchor hidden-xs" href="#輸入輸出格式" title="輸入輸出格式"><span class="octicon octicon-link"></span></a><span>輸入/輸出格式</span></h3><ul>
+<li><span>輸入</span></li>
+</ul><pre><code class="wrap typescript hljs">n       # num <span class="token keyword">of</span> point
+x1 y1   # coordinate <span class="token keyword">of</span> point
+<span class="token operator">...</span>     # n lines <span class="token keyword">of</span> coordinate
+n       # another <span class="token keyword">case</span>
+<span class="token operator">...</span>
+<span class="token number">0</span>       # end <span class="token keyword">of</span> test <span class="token keyword">case</span>
+</code></pre><ul>
+<li><span>輸出</span></li>
+</ul><pre><code class="wrap typescript hljs"><span class="token constant">P</span> x1 y1        # input point
+<span class="token constant">P</span> x2 y2
+<span class="token operator">...</span>
+<span class="token constant">E</span> x1 y1 x2 y2  # edge <span class="token keyword">of</span> voronoi diagram
+<span class="token operator">...</span>
+</code></pre><h2 id="軟體說明" data-id="軟體說明"><a class="anchor hidden-xs" href="#軟體說明" title="軟體說明"><span class="octicon octicon-link"></span></a><span>軟體說明</span></h2><h3 id="安裝" data-id="安裝"><a class="anchor hidden-xs" href="#安裝" title="安裝"><span class="octicon octicon-link"></span></a><span>安裝</span></h3><ul>
+<li><span>原始碼可至</span><code>code</code><span>資料夾或github查看</span></li>
+</ul><pre><code>git clone https://github.com/B083040012/NSYSU_Design_and_Analysis_of_Algorithm.git`
+</code></pre><ul>
+<li><span>python環境</span></li>
+</ul><pre><code class="wrap bash hljs">$ python --version
+Python 3.10.6
+$ pip list
+Package         Version
+--------------- -------
+contourpy       1.0.6
+cycler          0.11.0
+fonttools       4.38.0
+kiwisolver      1.4.4
+matplotlib      3.6.2
+numpy           1.23.5
+packaging       21.3
+Pillow          9.3.0
+pip             22.0.2
+pyparsing       3.0.9
+PyQt5           5.15.7
+PyQt5-Qt5       5.15.2
+PyQt5-sip       12.11.0
+python-dateutil 2.8.2
+setuptools      59.6.0
+six             1.16.0
+wheel           0.37.1
+</code></pre><ul>
+<li><span>啟動程式</span>
+<ol>
+<li><span>輸入</span><code>python main.py</code></li>
+<li><span>點擊</span><code>/dist/main.exe</code></li>
+</ol>
+</li>
+</ul><h3 id="功能和使用說明" data-id="功能和使用說明"><a class="anchor hidden-xs" href="#功能和使用說明" title="功能和使用說明"><span class="octicon octicon-link"></span></a><span>功能和使用說明</span></h3><p><img src="https://i.imgur.com/5Yt2nlg.png=500x" alt="" loading="lazy"></p><ul>
+<li><span>界面</span>
+<ul>
+<li><span>File：point讀取測資座標點，diagram讀取輸出文字檔案，Save_Diagram輸出執行結果</span></li>
+<li><span>Setting: Reset清除畫布</span></li>
+</ul>
+</li>
+<li><span>功能</span>
+<ul>
+<li><span>輸入/輸出</span>
+<ul>
+<li><span>可讀取有註解之測資</span></li>
+<li><span>可在畫布上任一座標點擊新增座標點，讀取檔案後亦可點擊在現有測資中新增座標點</span></li>
+<li><span>可以將執行結果輸出為文字檔案</span></li>
+<li><span>輸入檔案後，須點擊Next Case顯示第一筆測資</span></li>
+<li><span>讀取檔案會在右側顯示Case序號和輸入座標點</span></li>
+</ul>
+</li>
+<li><span>執行演算法</span>
+<ul>
+<li><span>畫布上顯示座標點後即可點擊Run執行演算法</span></li>
+<li><span>若座標點數不超過3點，會直接顯示diagram</span></li>
+<li><span>若點數超過3點，點擊Next Step即可顯示Divide and Conquer演算法過程</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h3 id="程式設計" data-id="程式設計"><a class="anchor hidden-xs" href="#程式設計" title="程式設計"><span class="octicon octicon-link"></span></a><span>程式設計</span></h3><ul>
+<li><span>座標點數2</span>
+<ul>
+<li><span>直接畫出2點中垂線</span></li>
+<li><span>計算斜率並找出對應的畫布邊緣座標，若斜率為0或無限大需要直接計算座標</span></li>
+</ul>
+</li>
+<li><span>座標點數3</span>
+<ul>
+<li><span>3點共線：依照座標軸x,y排序，再兩兩畫出中垂線</span></li>
+<li><span>3點不共線：先計算外心，再以外心為起點畫出3條中垂線，需要確認中垂線延伸方向，繪製中垂線步驟為</span>
+<ol>
+<li><span>計算端點和其他兩點之向量</span></li>
+<li><span>計算兩項量夾角</span></li>
+<li><span>若夾角&lt;90度，中垂線方向為[外心-&gt;兩點中點]。若夾角=90度，中垂線方向為前述兩項量之合。若夾角&gt;90度，中垂線方向為[兩點中點-&gt;外心]</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>座標點數&gt;3</span>
+<ul>
+<li><span>使用divide and conquer演算法</span></li>
+</ul>
+<ol>
+<li><span>依照x座標排序，將座標點一分為二</span></li>
+<li><span>計算左側座標點之convex hull, voronoi edge</span></li>
+<li><span>計算右側座標點之convex hull, voronoi edge</span></li>
+<li><span>繪製convex hull</span>
+<ul>
+<li><span>利用Andrew’s Monotone Chain演算法</span></li>
+</ul>
+<ol>
+<li><span>從最左側座標開始繪製下半凸包</span></li>
+<li><span>從最右側座標開始繪製上半凸包</span></li>
+<li><span>合併兩半凸包</span></li>
+</ol>
+</li>
+<li><span>繪製hyperplane</span>
+<ol>
+<li><span>計算上切線和下切線，將初始化掃描線為下切線</span></li>
+<li><span>從下切線兩端點之中垂線開始繪製hyperplane，求出包含兩端點voronoi edge和hyperplane交點，並更新掃描線和hyperplane斜率</span></li>
+<li><span>重複步驟5.2，直到掃描線和上切線重合</span></li>
+</ol>
+</li>
+<li><span>消線部份未解決的問題</span>
+<ul>
+<li><span>目前尚無法決定需要消除哪一側的voronoi edge</span></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul><h2 id="軟體測試與實驗結果" data-id="軟體測試與實驗結果"><a class="anchor hidden-xs" href="#軟體測試與實驗結果" title="軟體測試與實驗結果"><span class="octicon octicon-link"></span></a><span>軟體測試與實驗結果</span></h2><h3 id="測試環境" data-id="測試環境"><a class="anchor hidden-xs" href="#測試環境" title="測試環境"><span class="octicon octicon-link"></span></a><span>測試環境</span></h3><pre><code class="wrap typescript hljs"><span class="token constant">OS</span><span class="token operator">:</span> Ubuntu <span class="token number">22.04</span><span class="token number">.1</span> <span class="token constant">LTS</span> x86_64 
+Host<span class="token operator">:</span> Redmi Book Pro 14S 
+Kernel<span class="token operator">:</span> <span class="token number">5.15</span><span class="token number">.0</span><span class="token operator">-</span><span class="token number">53</span><span class="token operator">-</span>generic
+Shell<span class="token operator">:</span> bash <span class="token number">5.1</span><span class="token number">.16</span> 
+Resolution<span class="token operator">:</span> 2560x1600 
+<span class="token constant">DE</span><span class="token operator">:</span> <span class="token constant">GNOME</span> <span class="token number">42.5</span>
+Terminal<span class="token operator">:</span> gnome<span class="token operator">-</span>terminal 
+<span class="token constant">CPU</span><span class="token operator">:</span> <span class="token constant">AMD</span> Ryzen <span class="token number">5</span> 5625U <span class="token keyword">with</span> Radeon <span class="token function">Graphics</span> <span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span> @ <span class="token number">4</span><span class="token punctuation">.</span>388GHz 
+<span class="token constant">GPU</span><span class="token operator">:</span> <span class="token constant">AMD</span> <span class="token constant">ATI</span> <span class="token number">03</span><span class="token operator">:</span><span class="token number">00.0</span> Barcelo 
+Memory<span class="token operator">:</span> 3845MiB <span class="token operator">/</span> 15345MiB
+</code></pre><h3 id="測試數據" data-id="測試數據"><a class="anchor hidden-xs" href="#測試數據" title="測試數據"><span class="octicon octicon-link"></span></a><span>測試數據</span></h3><ul>
+<li><span>測試輸入與輸出檔案附於</span><a href="#%E9%99%84%E9%8C%84"><span>附錄</span></a></li>
+</ul><h4 id="23點" data-id="23點"><a class="anchor hidden-xs" href="#23點" title="23點"><span class="octicon octicon-link"></span></a><span>2~3點</span></h4><p><img src="https://i.imgur.com/3iUGydn.png" alt="" loading="lazy" width="350"><img src="https://i.imgur.com/gFosvMQ.png" alt="" loading="lazy" width="350"><br>
+<img src="https://i.imgur.com/hI7aQ8S.png" alt="" loading="lazy" width="350"><img src="https://i.imgur.com/inBykjX.png" alt="" loading="lazy" width="350"><br>
+<img src="https://i.imgur.com/uOXTFON.png" alt="" loading="lazy" width="350"><img src="https://i.imgur.com/ZHcN2e0.png" alt="" loading="lazy" width="350"><br>
+<img src="https://i.imgur.com/nUQqnOt.png" alt="" loading="lazy" width="350"><img src="https://i.imgur.com/KAelIO3.png" alt="" loading="lazy" width="350"></p><h4 id="3點以上" data-id="3點以上"><a class="anchor hidden-xs" href="#3點以上" title="3點以上"><span class="octicon octicon-link"></span></a><span>3點以上</span></h4><ul>
+<li><span>藍色和綠色線段表示merge前的voronoi diagram，紅色虛線為merge後的convex hull</span></li>
+<li><span>因為尚未實作出消線，因此merge階段只新增黃色hyperplane，保留merge前左右邊的voronoi diagram</span></li>
+<li><span>問題</span>
+<ul>
+<li><span>若出現merge時掃描線斜率為0的情況，目前沒辦法計算出相對應hyperplane的斜率，未來可以透過直接給定hyperplane起終點座標來解決</span></li>
+</ul>
+</li>
+</ul><p><img src="https://i.imgur.com/GJ54eUn.png" alt="" loading="lazy" width="350"><img src="https://i.imgur.com/Kd5Semn.png" alt="" loading="lazy" width="350"><br>
+<img src="https://i.imgur.com/9toadFm.png" alt="" loading="lazy" width="350"><img src="https://i.imgur.com/qgIzNp3.png" alt="" loading="lazy" width="350"><br>
+<img src="https://i.imgur.com/hLvRui7.png" alt="" loading="lazy" width="350"></p><h2 id="結論與心得" data-id="結論與心得"><a class="anchor hidden-xs" href="#結論與心得" title="結論與心得"><span class="octicon octicon-link"></span></a><span>結論與心得</span></h2><ul>
+<li><span>初測時主要面對的問題是gui的建構和遭遇不同種類三角形(銳角、鈍角和直角三角形)的應對方式，gui在以往的程式實作中較少接觸，因此需要花費一些時間熟悉、學習；繪製voronoi diagram時以為需要針對不同三角形進行不同的繪製方法，不過在思考過程中發現需要只考慮向量夾角即可，省去不少條件處理的過程。</span></li>
+<li><span>後測階段在convex hull的繪製還算順利，但在繪製hyperplane時遭遇許多困難，包括尋找上下切線以及浮點數誤差等問題，導致最後消線的判斷來不及完成，有些遺憾，也了解到僅僅理解演算法是不夠的，將之實作過程中還有許多有待解決的問題。</span></li>
+</ul><h2 id="附錄" data-id="附錄"><a class="anchor hidden-xs" href="#附錄" title="附錄"><span class="octicon octicon-link"></span></a><span>附錄</span></h2><ul>
+<li><span>相關檔案皆附於</span><a href="https://drive.google.com/drive/folders/1Im_vLIDPCbIXrylNhgogCXJ6T0IhV4zs?usp=sharing" target="_blank" rel="noopener"><span>google drive</span></a></li>
+</ul></div>
+    <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
+        <div class="pull-right dropdown">
+            <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
+                <div class="toc"><ul class="nav">
+<li><a href="#Voronoi-Diagram-Final-Report" title="Voronoi Diagram Final Report">Voronoi Diagram Final Report</a><ul class="nav">
+<li><a href="#軟體規格書" title="軟體規格書">軟體規格書</a><ul class="nav">
+<li><a href="#輸入輸出格式" title="輸入/輸出格式">輸入/輸出格式</a></li>
+</ul>
+</li>
+<li><a href="#軟體說明" title="軟體說明">軟體說明</a><ul class="nav">
+<li><a href="#安裝" title="安裝">安裝</a></li>
+<li><a href="#功能和使用說明" title="功能和使用說明">功能和使用說明</a></li>
+<li><a href="#程式設計" title="程式設計">程式設計</a></li>
+</ul>
+</li>
+<li><a href="#軟體測試與實驗結果" title="軟體測試與實驗結果">軟體測試與實驗結果</a><ul class="nav">
+<li><a href="#測試環境" title="測試環境">測試環境</a></li>
+<li><a href="#測試數據" title="測試數據">測試數據</a></li>
+</ul>
+</li>
+<li><a href="#結論與心得" title="結論與心得">結論與心得</a></li>
+<li><a href="#附錄" title="附錄">附錄</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">Expand all</a><a class="back-to-top" href="#">Back to top</a><a class="go-to-bottom" href="#">Go to bottom</a></div>
+            </ul>
+        </div>
+    </div>
+    <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;" null null>
+        <div class="toc"><ul class="nav">
+<li><a href="#Voronoi-Diagram-Final-Report" title="Voronoi Diagram Final Report">Voronoi Diagram Final Report</a><ul class="nav">
+<li><a href="#軟體規格書" title="軟體規格書">軟體規格書</a><ul class="nav">
+<li><a href="#輸入輸出格式" title="輸入/輸出格式">輸入/輸出格式</a></li>
+</ul>
+</li>
+<li><a href="#軟體說明" title="軟體說明">軟體說明</a><ul class="nav">
+<li><a href="#安裝" title="安裝">安裝</a></li>
+<li><a href="#功能和使用說明" title="功能和使用說明">功能和使用說明</a></li>
+<li><a href="#程式設計" title="程式設計">程式設計</a></li>
+</ul>
+</li>
+<li><a href="#軟體測試與實驗結果" title="軟體測試與實驗結果">軟體測試與實驗結果</a><ul class="nav">
+<li><a href="#測試環境" title="測試環境">測試環境</a></li>
+<li><a href="#測試數據" title="測試數據">測試數據</a></li>
+</ul>
+</li>
+<li><a href="#結論與心得" title="結論與心得">結論與心得</a></li>
+<li><a href="#附錄" title="附錄">附錄</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">Expand all</a><a class="back-to-top" href="#">Back to top</a><a class="go-to-bottom" href="#">Go to bottom</a></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gist-embed/2.6.0/gist-embed.min.js" integrity="sha256-KyF2D6xPIJUW5sUDSs93vWyZm+1RzIpKCexxElmxl8g=" crossorigin="anonymous" defer></script>
+    <script>
+        var markdown = $(".markdown-body");
+        //smooth all hash trigger scrolling
+        function smoothHashScroll() {
+            var hashElements = $("a[href^='#']").toArray();
+            for (var i = 0; i < hashElements.length; i++) {
+                var element = hashElements[i];
+                var $element = $(element);
+                var hash = element.hash;
+                if (hash) {
+                    $element.on('click', function (e) {
+                        // store hash
+                        var hash = this.hash;
+                        if ($(hash).length <= 0) return;
+                        // prevent default anchor click behavior
+                        e.preventDefault();
+                        // animate
+                        $('body, html').stop(true, true).animate({
+                            scrollTop: $(hash).offset().top
+                        }, 100, "linear", function () {
+                            // when done, add hash to url
+                            // (default click behaviour)
+                            window.location.hash = hash;
+                        });
+                    });
+                }
+            }
+        }
+
+        smoothHashScroll();
+        var toc = $('.ui-toc');
+        var tocAffix = $('.ui-affix-toc');
+        var tocDropdown = $('.ui-toc-dropdown');
+        //toc
+        tocDropdown.click(function (e) {
+            e.stopPropagation();
+        });
+
+        var enoughForAffixToc = true;
+
+        function generateScrollspy() {
+            $(document.body).scrollspy({
+                target: ''
+            });
+            $(document.body).scrollspy('refresh');
+            if (enoughForAffixToc) {
+                toc.hide();
+                tocAffix.show();
+            } else {
+                tocAffix.hide();
+                toc.show();
+            }
+            $(document.body).scroll();
+        }
+
+        function windowResize() {
+            //toc right
+            var paddingRight = parseFloat(markdown.css('padding-right'));
+            var right = ($(window).width() - (markdown.offset().left + markdown.outerWidth() - paddingRight));
+            toc.css('right', right + 'px');
+            //affix toc left
+            var newbool;
+            var rightMargin = (markdown.parent().outerWidth() - markdown.outerWidth()) / 2;
+            //for ipad or wider device
+            if (rightMargin >= 133) {
+                newbool = true;
+                var affixLeftMargin = (tocAffix.outerWidth() - tocAffix.width()) / 2;
+                var left = markdown.offset().left + markdown.outerWidth() - affixLeftMargin;
+                tocAffix.css('left', left + 'px');
+            } else {
+                newbool = false;
+            }
+            if (newbool != enoughForAffixToc) {
+                enoughForAffixToc = newbool;
+                generateScrollspy();
+            }
+        }
+        $(window).resize(function () {
+            windowResize();
+        });
+        $(document).ready(function () {
+            windowResize();
+            generateScrollspy();
+        });
+
+        //remove hash
+        function removeHash() {
+            window.location.hash = '';
+        }
+
+        var backtotop = $('.back-to-top');
+        var gotobottom = $('.go-to-bottom');
+
+        backtotop.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToTop)
+                scrollToTop();
+            removeHash();
+        });
+        gotobottom.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToBottom)
+                scrollToBottom();
+            removeHash();
+        });
+
+        var toggle = $('.expand-toggle');
+        var tocExpand = false;
+
+        checkExpandToggle();
+        toggle.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            tocExpand = !tocExpand;
+            checkExpandToggle();
+        })
+
+        function checkExpandToggle () {
+            var toc = $('.ui-toc-dropdown .toc');
+            var toggle = $('.expand-toggle');
+            if (!tocExpand) {
+                toc.removeClass('expand');
+                toggle.text('Expand all');
+            } else {
+                toc.addClass('expand');
+                toggle.text('Collapse all');
+            }
+        }
+
+        function scrollToTop() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: 0
+            }, 100, "linear");
+        }
+
+        function scrollToBottom() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: $(document.body)[0].scrollHeight
+            }, 100, "linear");
+        }
+    </script>
+</body>
+
+</html>

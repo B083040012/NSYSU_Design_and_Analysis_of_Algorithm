@@ -37,6 +37,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.plot_point()
         self.queue_index = 0
         self.step_cnt = 0
+        self.vonoroi.paint_queue_flag = False
 
     def diagram_move(self, event):
         x = int(event.xdata) if event.xdata != None else None

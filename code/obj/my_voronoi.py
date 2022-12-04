@@ -1,4 +1,10 @@
-from heapq import merge
+"""
+Voronoi Diagram (Divide and Conquer) 
+Course: Design and Analysis of Algorithm, 2022 Fall, NSYSU
+Author: Bo Han, Chen
+Student ID: B083040012
+"""
+
 from xmlrpc.client import MAXINT
 import numpy as np
 
