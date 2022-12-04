@@ -1,6 +1,6 @@
 # custom ignore dir
-test_data/
 test_env/
+*.zip
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
